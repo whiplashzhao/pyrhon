@@ -60,6 +60,18 @@
 # else:
 #     print('测试失败!')
 
+
+
+
+
+# print(sorted([36, 5, -12, 9, -21]))
+# print(sorted([36, 5, -12, 9, -21], key = abs))
+# p = sorted(['b', 'a', 'Z', '0', '8', 'H'])
+# print(p)
+# pp = sorted(['b', 'a', 'Z', '0', '8', 'H'], key=str.lower, reverse=True)
+# print(pp)
+
+
 # print(sorted([36, 5, -12, 9, -21]))
 # print(sorted([36, 5, -12, 9, -21], key = abs))
 # p = sorted(['b', 'a', 'Z', '0', '8', 'H'])
