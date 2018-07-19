@@ -15,7 +15,7 @@ line_output = ''
 for line in IQ.readlines():
     if m == 0:
         line_output = line
-    if m % 4 == 0 or m % 4 == 1:
+    elif m % 4 == 0 or m % 4 == 1:
         line_output = line_output + line
     m = m + 1
 # 
