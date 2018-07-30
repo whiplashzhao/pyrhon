@@ -1,0 +1,71 @@
+　　在Python类的方法（method）中，要调用父类的某个方法，在Python 2.2以前，通常的写法如代码段1：
+
+ 代码段1：
+
+ class A:
+  def __init__(self):
+   print "enter A"
+   print "leave A"
+
+ class B(A):
+  def __init__(self):
+   print "enter B"
+   A.__init__(self)
+   print "leave B"
+
+ >>> b = B()
+
+ enter B
+ enter A
+ leave A
+ leave B
+
+即，使用非绑定的类方法（用类名来引用的方法），并在参数列表中，引入待绑定的对象（self），从而达到调用父类的目的。
+
+　　这样做的缺点是，当一个子类的父类发生变化时（如类B的父类由A变为C时），必须遍历整个类定义，把所有的通过非绑定的方法的类名全部替换过来，例如代码段2，
+
+ 代码段2：
+
+ class B(C):    # A --> C
+  def __init__(self):
+   print "enter B"
+   C.__init__(self) # A --> C
+   print "leave B"
+
+如果代码简单，这样的改动或许还可以接受。但如果代码量庞大，这样的修改可能是灾难性的。
+
+　　因此，自Python 2.2开始，Python添加了一个关键字super，来解决这个问题。下面是Python 2.3的官方文档说明：
+
+ super(type[, object-or-type])
+
+  Return the superclass of type. If the second argument is omitted the super object
+  returned is unbound. If the second argument is an object, isinstance(obj, type) 
+  must be true. If the second argument is a type, issubclass(type2, type) must be 
+  true. super() only works for new-style classes.
+
+  A typical use for calling a cooperative superclass method is:
+
+   class C(B):
+       def meth(self, arg):
+           super(C, self).meth(arg)
+
+  New in version 2.2.
+
+　　从说明来看，可以把类B改写如代码段3：
+
+ 代码段3：
+
+ class A(object):    # A must be new-style class
+  def __init__(self):
+   print "enter A"
+   print "leave A"
+
+ class B(C):     # A --> C
+  def __init__(self):
+   print "enter B"
+   super(B, self).__init__()
+   print "leave B"
+
+　　尝试执行上面同样的代码，结果一致，但修改的代码只有一处，把代码的维护量降到最低，是一个不错的用法。因此在我们的开发过程中，super关键字被大量使用，而且一直表现良好。
+
+　　在我们的印象中，对于super(B, self).__init__()是这样理解的：super(B, self)首先找到B的父类（就是类A），然后把类B的对象self转换为类A的对象（通过某种方式，一直没有考究是什么方式，惭愧），然后“被转换”的类A对象调用自己的__init__函数。考虑到super中只有指明子类的机制，因此，在多继承的类定义中，通常我们保留使用类似代码段1的方法。
