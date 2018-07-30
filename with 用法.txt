@@ -1,0 +1,26 @@
+with如何工作?
+紧跟with后面的语句被求值后，返回对象的 __enter__() 方法被调用，这个方法的返回值将被赋值给as后面的变量。 
+当with后面的代码块全部被执行完之后，将调用前面返回对象的 __exit__()方法。
+
+下面例子可以具体说明with如何工作：
+
+#!/usr/bin/env python
+# with_example01.py
+class Sample:
+    def __enter__(self):
+        print "In __enter__()"
+        return "Foo"
+    def __exit__(self, type, value, trace):
+        print "In __exit__()"
+def get_sample():
+    return Sample()
+with get_sample() as sample:
+    print "sample:", sample
+
+
+运行代码，输出如下
+
+bash-3.2$ ./with_example01.py
+In __enter__()
+sample: Foo
+In __exit__()
